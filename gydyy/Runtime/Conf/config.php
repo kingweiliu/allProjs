@@ -2,28 +2,25 @@
 return array (
   'db_type' => 'mysql',
   'db_host' => 'localhost',
-  'db_name' => 'feifeicms',
+  'db_name' => 'gydyyDB',
   'db_user' => 'root',
-  'db_pwd' => '123456',
+  'db_pwd' => '',
   'db_port' => '3306',
   'db_prefix' => 'ff_',
   'db_charset' => 'utf8',
   'default_theme' => 'defalut',
-  'site_name' => '飞飞影视系统',
-  'site_path' => '/',
+  'site_name' => '光阴电影院',
+  'site_path' => '/gydyy/',
   'site_url' => 'http://127.0.0.1/',
-  'site_keywords' => '飞飞影视系统PHP版,PHP电影程序',
-  'site_description' => '努力打造飞飞影视系统为最好的PHP影视系统!',
-  'site_email' => '110119@qq.com',
+  'site_keywords' => '光阴电影院',
+  'site_description' => '最新最全光阴电影院!',
+  'site_email' => 'kwliu002@163.com',
   'site_copyright' => '本网站为非赢利性站点，本网站所有内容均来源于互联网相关站点自动搜索采集信息，相关链接已经注明来源。',
   'site_hot' => '大笑江湖
 宫锁心玉
-php电影程序
-飞飞影视系统
 电视剧
 大笑江湖
 宫锁心玉
-php电影程序|http://www.feifeicms.com
 电视剧',
   'site_tongji' => '<script language="javascript" type="text/javascript" src="http://js.users.51.la/14834816.js"></script>',
   'site_icp' => 'ICP备2010111号',

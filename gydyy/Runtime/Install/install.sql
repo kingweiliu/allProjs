@@ -73,10 +73,6 @@ CREATE TABLE IF NOT EXISTS ff_link (
   PRIMARY KEY  (link_id)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-INSERT INTO ff_link (link_id, link_name, link_logo, link_url, link_order, link_type) VALUES
-(1, '飞飞影视系统', 'http://', 'http://www.feifeicms.com', 1, 1),
-(2, '电影网站导航', 'http://', 'http://www.8090logo.com', 2, 2);
-
 CREATE TABLE IF NOT EXISTS ff_list (
   list_id smallint(6) unsigned NOT NULL auto_increment,
   list_pid smallint(3) NOT NULL,
