@@ -40,7 +40,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	HANDLE hProc = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_WRITE | PROCESS_VM_OPERATION | PROCESS_CREATE_THREAD, FALSE, nProcId);
 	
 	VOID* pAddr = VirtualAllocEx(hProc, NULL, MAX_PATH, MEM_COMMIT, PAGE_READWRITE);
-	TCHAR pszDllName [] = L"injectDll.dll";
+	TCHAR pszDllName [] = L"D:\\github\\allProjs\\vcproj\\dllInjectTest\\Debug\\injectDll.dll";
+	
 	SIZE_T sizeWrited = 0;
 	bRet = WriteProcessMemory(hProc, pAddr, pszDllName, sizeof(pszDllName),  &sizeWrited);
 	if (!bRet)
