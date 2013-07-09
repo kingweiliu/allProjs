@@ -28,6 +28,7 @@
 							'PreprocessorDefinitions':['_DEBUG'],
 							'BasicRuntimeChecks':'3',
 							'RuntimeLibrary':'1',
+							'DebugInformationFormat': '3',
 						},
 						'VCLinkerTool':{
 							'GenerateDebugInformation':'true',

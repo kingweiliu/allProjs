@@ -50,7 +50,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	PTHREAD_START_ROUTINE pLoadLibrary = (PTHREAD_START_ROUTINE)::GetProcAddress(::GetModuleHandleW(L"Kernel32"), "LoadLibraryW");
 	DWORD dwThreadID; 
-	HANDLE hThrd=  ::CreateRemoteThreadEx(hProc, NULL, NULL, pLoadLibrary, pAddr, NULL, NULL,  &dwThreadID);
+	HANDLE hThrd=  ::CreateRemoteThread(hProc, NULL, NULL, pLoadLibrary, pAddr, NULL,  &dwThreadID);
 
 
 	return 0;
