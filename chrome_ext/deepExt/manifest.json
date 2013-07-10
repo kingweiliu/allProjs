@@ -1,0 +1,16 @@
+{
+	"manifest_version": 2,
+	"background": {
+		"scripts": ["bkg.js"]
+	},
+	"description": "an extension to test how content js functions",
+	"version": "1.0",
+	"name": "ljw's extension",
+	"browser_action": {
+		"default_icon": "icon.png"
+	},
+	"content_scripts": [{
+		"matches": ["http://*.163.com/*"],
+		"js": ["contentJS.js"]
+	}]
+}
