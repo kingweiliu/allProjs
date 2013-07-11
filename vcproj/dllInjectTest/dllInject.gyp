@@ -16,6 +16,13 @@
 		'src/stdafx.cpp',
 		'src/stdafx.h',
 		],
+		'configuration':{
+		  'VCLinkerTool':{
+		    'AdditionalDependencies':[
+			  'shlwapi.lib',
+			]
+		  },
+		}
 			
 	},
 	{
@@ -33,8 +40,9 @@
 		'src/stdafx.h',		
 		],
 		'libraries': ['psapi.lib',
+			'shlwapi.lib'
 		],
-		'default_configuration': 'Debug',
+		
 		
 		
 	}]
