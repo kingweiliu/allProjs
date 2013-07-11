@@ -1,4 +1,5 @@
 {
+  'default_configuration': 'Debug',
   'target_defaults':{
 	'configurations':{
 	  'Common_Base':{
@@ -12,7 +13,9 @@
 		  'VCLinkerTool':{
 		    'AdditionalDependencies':[
 			  'kernel32.lib',
-			  'gdi32.lib',			  
+			  'gdi32.lib',		
+			  'user32.lib',
+			  'uuid.lib',
 			],
 		  },
 		},
@@ -23,8 +26,8 @@
 		  'VCLinkerTool':{
 		    'TargetMachine':'1',
 		  },
-		},
-		msvs_configuration_platform':'Win32',
+		},		
+		'msvs_configuration_platform':'Win32',
 	  },
 	  'Debug_Base':{
 	    'abstract':1,
@@ -33,8 +36,9 @@
 		    'Optimization':'0',
 			'PreprocessorDefinitions':['_DEBUG'],
 			'BasicRuntimeChecks':'3',
-			'RuntimeLibrary':'1',			
-		  }
+			'RuntimeLibrary':'1',
+			'DebugInformationFormat': '3',			
+		  },
 		  'VCLinkerTool':{
 		    'GenerateDebugInformation':'true',
 		  },
@@ -42,7 +46,7 @@
 	  },
 	  
 	  'Debug':{
-		'inherit_from':['Common_Base', 'x86_Base',],
+		'inherit_from':['Common_Base', 'x86_Base', 'Debug_Base'],
 	  }
 	}
   }  
