@@ -1,0 +1,49 @@
+{
+  'target_defaults':{
+	'configurations':{
+	  'Common_Base':{
+		'abstract':1,
+		'msvs_configuration_attributes':{
+		  'OutputDirectory':'<(DEPTH)\\build\\$(ConfigurationName)',
+		  'IntermediateDirectory':'$(OutDir)\\obj\\$(ProjectName)',
+		  'CharacterSet':'1',
+		},
+		'msvs_settings':{
+		  'VCLinkerTool':{
+		    'AdditionalDependencies':[
+			  'kernel32.lib',
+			  'gdi32.lib',			  
+			],
+		  },
+		},
+	  },
+	  'x86_Base':{
+	    'abstract':1,
+		'msvs_settings':{
+		  'VCLinkerTool':{
+		    'TargetMachine':'1',
+		  },
+		},
+		msvs_configuration_platform':'Win32',
+	  },
+	  'Debug_Base':{
+	    'abstract':1,
+		'msvs_settings':{
+		  'VCCLCompilerTool':{
+		    'Optimization':'0',
+			'PreprocessorDefinitions':['_DEBUG'],
+			'BasicRuntimeChecks':'3',
+			'RuntimeLibrary':'1',			
+		  }
+		  'VCLinkerTool':{
+		    'GenerateDebugInformation':'true',
+		  },
+		},
+	  },
+	  
+	  'Debug':{
+		'inherit_from':['Common_Base', 'x86_Base',],
+	  }
+	}
+  }  
+}

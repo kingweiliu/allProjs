@@ -1,18 +1,22 @@
 {
+	'includes':[
+		'devenv.gypi',
+	],
 	'targets': [{
 		'target_name': 'spy',
 		'type': 'shared_library',
-		'sources': ['src/spyMain.cpp',
+		'defines': ['WIN32',		
+		'UNICODE',
+		'_UNICODE',
+		],
+		'sources': [
+		'src/spyMain.cpp',
 		'src/Session.cpp',
 		'src/Session.h',
 		'src/stdafx.cpp',
 		'src/stdafx.h',
 		],
-		'msvs_settings': {
-			'VCLinkerTool': {
-				'ResourceOnlyDLL': 'true',				
-			},			
-		},		
+			
 	},
 	{
 		'target_name': 'memSchr',
@@ -22,36 +26,16 @@
 		'UNICODE',
 		'_UNICODE',
 		],
-		'sources': ['src/dllInject.cpp',
+		'msvs_precompiled_header': 'src/stdafx.h',
+        'msvs_precompiled_source': 'src/stdafx.cpp',
+		'sources': ['src/memSchrMain.cpp',
 		'src/stdafx.cpp',
-		'src/stdafx.h',
-		'src/targetver.h',
+		'src/stdafx.h',		
 		],
 		'libraries': ['psapi.lib',
 		],
 		'default_configuration': 'Debug',
-		'configurations': {
-			'Debug': {
-				'msvs_configuration_platform': 'Win32',
-				'msvs_settings': {
-					'VCCLCompilerTool': {
-						'Optimization': '0',
-						'PreprocessorDefinitions': ['_DEBUG'],
-						'BasicRuntimeChecks': '3',
-						'RuntimeLibrary': '1',
-						'DebugInformationFormat': '3',
-						
-					},
-					'VCLinkerTool': {
-						'GenerateDebugInformation': 'true',
-						'TargetMachine': '1',
-						'LinkIncremental': '2',
-						
-					}
-				}
-			},
-			
-		},
+		
 		
 	}]
 }
