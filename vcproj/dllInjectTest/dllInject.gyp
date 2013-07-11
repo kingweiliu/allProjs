@@ -1,22 +1,21 @@
 {
 	'targets': [{
-		'target_name': 'injectDll',
+		'target_name': 'spy',
 		'type': 'shared_library',
-		'sources': ['src/injectDll.cpp',
+		'sources': ['src/spyMain.cpp',
+		'src/Session.cpp',
+		'src/Session.h',
 		'src/stdafx.cpp',
 		'src/stdafx.h',
 		],
 		'msvs_settings': {
 			'VCLinkerTool': {
-				'ResourceOnlyDLL': 'true',
-				
-			},
-			
-		},
-		
+				'ResourceOnlyDLL': 'true',				
+			},			
+		},		
 	},
 	{
-		'target_name': 'dllInject',
+		'target_name': 'memSchr',
 		'type': 'executable',
 		'defines': ['WIN32',
 		'_CONSOLE',
