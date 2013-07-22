@@ -20,12 +20,13 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 	{
 		DWORD *pWord = 0;
 		pWord ++;
-		for (; pWord <(DWORD*)0x7FFFFFFF; pWord++)
-		{
-			TCHAR buf[1024]=L"haha";
-			//_ltow(*pWord, buf, 16);
-			MessageBox(NULL, buf,L"ljw", MB_OK);
-		}
+		//for (; pWord <(DWORD*)0x7FFFFFFF; pWord++)
+		//{
+		//	TCHAR buf[1024]=L"haha";
+		//	//_ltow(*pWord, buf, 16);
+		//	MessageBox(NULL, buf,L"ljw", MB_OK);
+		//}
+		break;
 
 
 		

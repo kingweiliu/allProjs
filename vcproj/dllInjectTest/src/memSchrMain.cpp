@@ -9,6 +9,7 @@
 #include <shlwapi.h>
 
 
+
 //所有的进程列举出来
 // 选择一个进程进行注入
 
@@ -60,10 +61,36 @@ BOOL injectDll(DWORD dwProcID, TCHAR* pszDll)
 	return INVALID_HANDLE_VALUE == hThrd ;
 }
 
+template <class T>
+BOOL searchInMem(T* pStart, SIZE_T dwLength, T dwValue){
+	T* pEnd = (T*)((char*)pStart + dwLength);
+	while (pStart < pEnd)
+	{		
+		if (*pStart == dwValue)
+		{
+			printf("\t%x\n", pStart);
+		}
+		pStart ++;
+	}
+	return TRUE;
+	
+}
+
 int _tmain(int argc, _TCHAR* argv[])
 {
-	DWORD dwProcId = getProcIdNeedInject();
-	injectDll(dwProcId, L"spy.dll");
+	/*DWORD dwProcId = getProcIdNeedInject();
+	injectDll(dwProcId, L"spy.dll");*/
+	
+
+	HMODULE hMod = LoadLibraryW(L"spy.dll");
+
+	typedef void (*FuncRun)(void);
+	FuncRun  pFR = (FuncRun)GetProcAddress(hMod, "Run");
+	if (pFR)
+	{
+		(*pFR)();
+	}
+	
 
 	return 0;
 }

@@ -9,12 +9,16 @@
 		'UNICODE',
 		'_UNICODE',
 		],
+		'msvs_precompiled_header': 'src/stdafx.h',
+        'msvs_precompiled_source': 'src/stdafx.cpp',
 		'sources': [
 		'src/spyMain.cpp',
 		'src/Session.cpp',
 		'src/Session.h',
 		'src/stdafx.cpp',
 		'src/stdafx.h',
+		'src/spy.h',
+		'src/spy.cpp',
 		],
 		'configuration':{
 		  'VCLinkerTool':{
