@@ -7,6 +7,7 @@
 #include <string>
 #include <Windows.h>
 #include <shlwapi.h>
+#include "public.h"
 
 
 
@@ -58,6 +59,8 @@ BOOL injectDll(DWORD dwProcID, TCHAR* pszDll)
 	PTHREAD_START_ROUTINE pLoadLibrary = (PTHREAD_START_ROUTINE)::GetProcAddress(::GetModuleHandleW(L"Kernel32"), "LoadLibraryW");
 	DWORD dwThreadID; 
 	HANDLE hThrd=  ::CreateRemoteThread(hProc, NULL, NULL, pLoadLibrary, pAddr, NULL,  &dwThreadID);
+
+	
 	return INVALID_HANDLE_VALUE == hThrd ;
 }
 
@@ -78,18 +81,26 @@ BOOL searchInMem(T* pStart, SIZE_T dwLength, T dwValue){
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	/*DWORD dwProcId = getProcIdNeedInject();
-	injectDll(dwProcId, L"spy.dll");*/
-	
+	DWORD dwProcId = getProcIdNeedInject();
 
-	HMODULE hMod = LoadLibraryW(L"spy.dll");
-
-	typedef void (*FuncRun)(void);
-	FuncRun  pFR = (FuncRun)GetProcAddress(hMod, "Run");
-	if (pFR)
+	HANDLE hPipe = CreateNamedPipe(PIPENAME, PIPE_ACCESS_DUPLEX, PIPE_TYPE_MESSAGE, PIPE_UNLIMITED_INSTANCES , 4096, 4096, 0, NULL);
+	if (hPipe == INVALID_HANDLE_VALUE)
 	{
-		(*pFR)();
+		return -1;
 	}
+
+	injectDll(dwProcId, L"spy.dll");
+	BOOL bConnect = WaitNamedPipe(PIPENAME, 1000);
+
+	
+	//HMODULE hMod = LoadLibraryW(L"spy.dll");
+
+	//typedef void (*FuncRun)(void);
+	//FuncRun  pFR = (FuncRun)GetProcAddress(hMod, "Run");
+	//if (pFR)
+	//{
+	//	(*pFR)();
+	//}
 	
 
 	return 0;

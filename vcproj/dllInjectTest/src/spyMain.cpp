@@ -16,6 +16,8 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 					 )
 {
 
+
+
 	while (true)
 	{
 		DWORD *pWord = 0;
@@ -26,7 +28,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 		//	//_ltow(*pWord, buf, 16);
 		//	MessageBox(NULL, buf,L"ljw", MB_OK);
 		//}
-		break;
+		Sleep(5000);
 
 
 		
