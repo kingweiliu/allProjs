@@ -10,6 +10,10 @@
 #include "public.h"
 
 
+char buf[1024];
+
+HANDLE hPipe = NULL;
+
 enum OP{
 	OP_Process,
 	OP_Input,
@@ -100,66 +104,97 @@ BOOL searchInMem(T* pStart, SIZE_T dwLength, T dwValue){
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	DWORD dwProcId = getProcIdNeedInject();
-
-	HANDLE hPipe = CreateNamedPipe(
-		PIPENAME,
-		PIPE_ACCESS_DUPLEX, 
-		PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT,
-		PIPE_UNLIMITED_INSTANCES , 
-		4096, 
-		4096,
-		0,
-		NULL);
-	if (hPipe == INVALID_HANDLE_VALUE)
-	{
-		return -1;
-	}
-
-	injectDll(dwProcId, L"build\\debug\\spy.dll");
-	BOOL bConnect = ConnectNamedPipe(hPipe, NULL);
-	if (!bConnect && GetLastError()!=ERROR_PIPE_CONNECTED)
-	{
-		return -1;
-	}
-
-
-	char buf[1024];
-	DWORD dwRead = 0;
-	BOOL bRead = FALSE;
-	bRead = ReadFile(hPipe, buf, 1024, &dwRead, NULL);
-	CMessage* pMsg = (CMessage*)buf;
-	if (pMsg->MsgCmd != Msg_OK)
-	{
-		return -1;
-	}
-
-	pMsg->MsgCmd = Msg_StartSession;
-	pMsg->DataLength = 0;
-	WriteFile(hPipe, buf, 8+pMsg->DataLength, &dwRead, NULL);
-
+	int index = ShowMenu();	
 	do 
 	{
-		printf("please Input dword to find:");
-		DWORD dwFind = 0;
-		scanf("%d", &dwFind);
-		pMsg->MsgCmd = Msg_Find;
-		pMsg->Data = (void*)dwFind;
-		pMsg->DataLength = 4;
-		bRead = WriteFile(hPipe, buf, 8+pMsg->DataLength, &dwRead, NULL);
-		if (!bRead)
+		switch (index)
 		{
+		case 1:
+			{
+				DWORD dwProcId = getProcIdNeedInject();
+
+				hPipe = CreateNamedPipe(
+					PIPENAME,
+					PIPE_ACCESS_DUPLEX, 
+					PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT,
+					PIPE_UNLIMITED_INSTANCES , 
+					4096, 
+					4096,
+					0,
+					NULL);
+				if (hPipe == INVALID_HANDLE_VALUE)
+				{
+					return -1;
+				}
+
+				injectDll(dwProcId, L"build\\debug\\spy.dll");
+				BOOL bConnect = ConnectNamedPipe(hPipe, NULL);
+				if (!bConnect && GetLastError()!=ERROR_PIPE_CONNECTED)
+				{
+					return -1;
+				}
+				DWORD dwRead = 0;
+				BOOL bRead = FALSE;
+				bRead = ReadFile(hPipe, buf, 1024, &dwRead, NULL);
+				CMessage* pMsg = (CMessage*)buf;
+				if (pMsg->MsgCmd != Msg_OK)
+				{
+					return -1;
+				}
+
+				pMsg->MsgCmd = Msg_StartSession;
+				pMsg->DataLength = 0;
+				WriteFile(hPipe, buf, 8+pMsg->DataLength, &dwRead, NULL);
+
+			}
+			break;
+		case 2:
+			{
+				if (!hPipe)
+				{
+					break;
+				}
+				printf("please Input dword to find:");
+				DWORD dwFind = 0;
+				scanf("%d", &dwFind);
+				CMessage* pMsg = (CMessage*)buf;
+				pMsg->MsgCmd = Msg_Find;
+				pMsg->Data = (void*)dwFind;
+				pMsg->DataLength = 4;
+				DWORD dwDataOperated = 0;
+				BOOL bRead = WriteFile(hPipe, buf, 8+pMsg->DataLength, &dwDataOperated, NULL);
+				if (!bRead)
+				{
+					break;
+				}
+				bRead = ReadFile(hPipe, buf, 1024, &dwDataOperated, NULL);
+				if (!bRead)
+				{
+					break;
+				}
+				printf("find result:%d\n", (DWORD)pMsg->Data);
+			}
+			break;
+		case 3:
+			{
+				printf("please enter changed value:");
+				int n;
+				scanf("%d", &n);
+				CMessage* pMsg = (CMessage*)buf;
+				pMsg->MsgCmd = Msg_Edit;
+				pMsg->Data = (void*)n;
+				pMsg->DataLength = 4;
+				DWORD dwDataOperated = 0;
+				BOOL bRead = WriteFile(hPipe, buf, 8+pMsg->DataLength, &dwDataOperated, NULL);
+				if (!bRead)
+				{
+					break;
+				}
+			}
 			break;
 		}
-		bRead = ReadFile(hPipe, buf, 1024, &dwRead, NULL);
-		if (!bRead)
-		{
-			break;
-		}
-
-
-	} while (bRead);
-	
+		index = ShowMenu();
+	} while (index<4);
 	return 0;
 }
 

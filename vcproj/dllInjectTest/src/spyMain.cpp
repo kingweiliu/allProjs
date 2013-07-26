@@ -8,11 +8,6 @@
 #include "process.h"
 
 
-
-bool IsReadable(){
-
-}
-
 unsigned __stdcall ThreadRun( void * )
 {
 	HANDLE hFile  = ::CreateFile(PIPENAME, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL , NULL);
@@ -63,7 +58,10 @@ unsigned __stdcall ThreadRun( void * )
 					break;
 				}
 				DWORD dwData = (DWORD)pMsg->Data;
-				pSession->SetValue(dwData);
+				bool bRet =pSession->SetValue(dwData);
+				pMsg->Data = (void*) (bRet ? (void*)1:0);
+				WriteFile(hFile, buffer, 1024, &dwWrite, NULL);
+
 			}
 		}
 
