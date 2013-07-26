@@ -4,38 +4,16 @@
 #include <map>
 #include <windows.h>
 
-
-extern std::map<void*, long> g_mapMemLayout;
-
 template <class T>
 class CSession
 {
 public:
 	CSession()
 	{
-		if (!g_mapMemLayout.size())
-		{
-			char* pAddress = (char*)0;
-			while (pAddress < (char*)0x7FFFFFFF)
-			{
-				MEMORY_BASIC_INFORMATION baseMemory;
-				SIZE_T nLength = VirtualQuery(pAddress, &baseMemory, sizeof(baseMemory));
-				if ((baseMemory.Protect & PAGE_NOACCESS) || (MEM_RESERVE == baseMemory.State && baseMemory.Protect == 0))
-				{
-
-				}
-				else
-				{
-					g_mapMemLayout[baseMemory.BaseAddress] = baseMemory.RegionSize;
-				}
-
-				pAddress += baseMemory.RegionSize +1;
-			}
-		}		
 	}
 	int Search(T value){
-		auto iter = g_mapMemLayout.begin();
-		if(m_vecAddress.size())
+		
+		if(!m_vecAddress.empty())
 		{
 			// find the value according to the map.
 			auto iter = m_vecAddress.rbegin();
@@ -51,23 +29,46 @@ public:
 		}
 		else
 		{
-			// initialize the map.
-			for (;iter != g_mapMemLayout.end();++iter)
-			{
-				SearchValue((T*)iter->first, iter->second, value);
-			}
+			SearchFirst(value);
 		}	
 		return m_vecAddress.size();
 	}
 
+	bool SetValue(T value)
+	{
+		if (m_vecAddress.size()>10)
+		{
+			return false;
+		}
+
+		auto iter = m_vecAddress.begin();
+		for (;iter != m_vecAddress.end(); ++iter)
+		{
+			T* pValue = (T*)*iter;
+			MEMORY_BASIC_INFORMATION baseMemory;
+			SIZE_T nLength = VirtualQuery(pValue, &baseMemory, sizeof(baseMemory));
+			if (baseMemory.Protect == PAGE_READWRITE)
+			{
+				*pValue = value;
+			}
+		}
+		return true;
+	}
+
 private:
-	int SearchValue(T* start, long size, T value)
+	int SearchValue(void* pStart, long size, T value)
 	{
 		int nCnt = 0;
 		//build the vector
-		T* pEnd = (T*)((char*)start + size);
+		T* pEnd = (T*)((char*)pStart + size);
+		T* start = (T*)pStart;
+
+		MEMORY_BASIC_INFORMATION baseMemory;
+		SIZE_T nLength = VirtualQuery(start, &baseMemory, sizeof(baseMemory));
+
 		while (start < pEnd)
 		{		
+
 			if (*start == value)
 			{
 				nCnt++;
@@ -77,6 +78,29 @@ private:
 		}
 		return nCnt;
 	}
+
+	void SearchFirst(T value)
+	{
+		char* pAddress = (char*)0;
+		while (pAddress < (char*)0x7FFFFFFF)
+		{
+			MEMORY_BASIC_INFORMATION baseMemory;
+			SIZE_T nLength = VirtualQuery(pAddress, &baseMemory, sizeof(baseMemory));
+			if ( (baseMemory.Protect & (PAGE_NOACCESS | PAGE_GUARD)) || (MEM_RESERVE == baseMemory.State && baseMemory.Protect == 0))
+			{
+
+			}
+			else
+			{				
+				SearchValue(baseMemory.BaseAddress, baseMemory.RegionSize, value);
+			}
+
+			pAddress += baseMemory.RegionSize +1;
+		}
+	}
+
+
+
 
 	std::vector<void*> m_vecAddress;
 	

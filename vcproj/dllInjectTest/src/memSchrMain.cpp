@@ -10,6 +10,25 @@
 #include "public.h"
 
 
+enum OP{
+	OP_Process,
+	OP_Input,
+	OP_Edit,
+	OP_End,
+};
+
+int ShowMenu()
+{
+	printf("please select an option:\n");
+	printf("\t1. select an process to inject.\n");
+	printf("\t2. input a value to search.\n");
+	printf("\t3. edit memory value.\n");
+	printf("\t4. end inject.\nplease make a selection:");
+	int index = 0;
+	scanf("%d", &index);
+	return index;
+}
+
 
 //所有的进程列举出来
 // 选择一个进程进行注入
@@ -83,26 +102,64 @@ int _tmain(int argc, _TCHAR* argv[])
 {
 	DWORD dwProcId = getProcIdNeedInject();
 
-	HANDLE hPipe = CreateNamedPipe(PIPENAME, PIPE_ACCESS_DUPLEX, PIPE_TYPE_MESSAGE, PIPE_UNLIMITED_INSTANCES , 4096, 4096, 0, NULL);
+	HANDLE hPipe = CreateNamedPipe(
+		PIPENAME,
+		PIPE_ACCESS_DUPLEX, 
+		PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT,
+		PIPE_UNLIMITED_INSTANCES , 
+		4096, 
+		4096,
+		0,
+		NULL);
 	if (hPipe == INVALID_HANDLE_VALUE)
 	{
 		return -1;
 	}
 
-	injectDll(dwProcId, L"spy.dll");
-	BOOL bConnect = WaitNamedPipe(PIPENAME, 1000);
+	injectDll(dwProcId, L"build\\debug\\spy.dll");
+	BOOL bConnect = ConnectNamedPipe(hPipe, NULL);
+	if (!bConnect && GetLastError()!=ERROR_PIPE_CONNECTED)
+	{
+		return -1;
+	}
 
+
+	char buf[1024];
+	DWORD dwRead = 0;
+	BOOL bRead = FALSE;
+	bRead = ReadFile(hPipe, buf, 1024, &dwRead, NULL);
+	CMessage* pMsg = (CMessage*)buf;
+	if (pMsg->MsgCmd != Msg_OK)
+	{
+		return -1;
+	}
+
+	pMsg->MsgCmd = Msg_StartSession;
+	pMsg->DataLength = 0;
+	WriteFile(hPipe, buf, 8+pMsg->DataLength, &dwRead, NULL);
+
+	do 
+	{
+		printf("please Input dword to find:");
+		DWORD dwFind = 0;
+		scanf("%d", &dwFind);
+		pMsg->MsgCmd = Msg_Find;
+		pMsg->Data = (void*)dwFind;
+		pMsg->DataLength = 4;
+		bRead = WriteFile(hPipe, buf, 8+pMsg->DataLength, &dwRead, NULL);
+		if (!bRead)
+		{
+			break;
+		}
+		bRead = ReadFile(hPipe, buf, 1024, &dwRead, NULL);
+		if (!bRead)
+		{
+			break;
+		}
+
+
+	} while (bRead);
 	
-	//HMODULE hMod = LoadLibraryW(L"spy.dll");
-
-	//typedef void (*FuncRun)(void);
-	//FuncRun  pFR = (FuncRun)GetProcAddress(hMod, "Run");
-	//if (pFR)
-	//{
-	//	(*pFR)();
-	//}
-	
-
 	return 0;
 }
 
