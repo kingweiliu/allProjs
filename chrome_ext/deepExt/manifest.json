@@ -10,7 +10,7 @@
 		"default_icon": "icon.png"
 	},
 	"content_scripts": [{
-		"matches": ["http://*.163.com/*"],
+		"matches": ["http://*.qidian.com/*"],
 		"js": ["contentJS.js"]
 	}]
 }

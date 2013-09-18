@@ -1,20 +1,68 @@
 
-var frame = document.createElement('iframe');
-frame.src = chrome.extension.getURL('popup.html');
+// cmd: newSection 新卷
+// 		newChap    章节
+//		chapContent  章节正文
 
+//if(false){
+if(window.location.href == "http://read.qidian.com/BookReader/107580.aspx"){
 
-var div = document.createElement('div');
-div.style.width="100%";
-div.style.height = "200px";
-div.style.backgroundColor = "yellow";
-div.innerHTML="hahaha<br/>abc";
-
-var ele = document.getElementById('endText');
-if(ele){
-	ele.appendChild(div);
-	ele.appendChild(frame);
+	function processChapterTitle(divTitle){
+		chrome.runtime.sendMessage({
+			'cmd':'newSection'
+			'title':divTitle.children[0].children[0].textContent,
+			'isText':false
+		});		
 	}
-//window.document.body.style.backgroundColor="red";
 
-alert('cs ok');
+	function processChapterList(children){
+		for(var i=0; i<children.length; ++i){
+			console.log(i);
+			console.log(children[i].outerHTML);
+
+			var url = children[i].firstElementChild.href;
+			var chapTitle = children[i].textContent;
+			console.log(url + "---"+ chapTitle);
+			chrome.runtime.sendMessage({
+				'cmd':'newChap',
+				'url':url,
+				'chapTitle':chapTitle,
+				'isText':true
+			});
+
+		}
+	}
+	
+	var divContent = document.getElementById("content");
+	if(divContent){
+		for(var child in divContent.children){
+			var divChild = divContent.children[child];
+			if(divChild.className == "box_title"){
+				processChapterTitle(divChild);
+			}
+			else if(divChild.className == "box_cont"){
+				processChapterList(divChild.children[0].children[0].children);
+			}
+			
+		}
+	}
+
+	
+}
+
+var urlReg = /http:\/\/read.qidian.com\/BookReader\/\d*,\d*\.aspx/ ; 
+if (window.location.href.match(urlReg)) {
+	var divContent = document.getElementById('content');
+	if (!divContent) {
+		return;
+	};
+
+	chrome.runtime.sendMessage({
+				'cmd':'newChap',
+				'url':window.location.href,
+				'chapTitle':chapTitle,
+				'isText':true
+			});
+	
+};
+
 
