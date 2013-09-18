@@ -166,3 +166,8 @@ NPError WINAPI NP_Shutdown()
 	MessageBox(NULL, L"NP_Shutdown",0,0);
 	return NPERR_NO_ERROR;
 }
+
+const char* NP_GetMIMEDescription(void)
+{
+	return "application/x-spiderhelper::test";
+}

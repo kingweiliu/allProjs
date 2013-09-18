@@ -1,4 +1,17 @@
 
+function getPlugin(){
+	plugin = document.getElementById('pluginObj');
+	return plugin;
+}
+
+
+chrome.browserAction.onClicked.addListener(function(){
+	alert('click');
+	var plugin =	document.getElementById('pluginObj');
+	alert(plugin.id);
+	plugin.showName('ljw');
+	alert('click');
+})
 
 
 var pageNeedCrawl =[];
