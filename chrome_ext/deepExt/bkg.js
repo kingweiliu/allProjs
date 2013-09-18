@@ -47,9 +47,7 @@ chrome.runtime.onMessage.addListener(
 	function (request, sender, sendResponse) {	
 		//if(request.title)	
 		//	alert("abc"+sender.tab.id + request.title);
-		if (bOpened) {
-			return;
-		};
+		/*
 
 		if (request.isText) {
 			console.log(JSON.stringify(request));
@@ -64,6 +62,12 @@ chrome.runtime.onMessage.addListener(
 		{
 			console.log(JSON.stringify(request));
 
+		}
+		*/
+
+		switch(request.cmd){
+			case 'chapContent':
+				console.log(JSON.stringify(request));
 		}
 		
 		
