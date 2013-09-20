@@ -3,7 +3,7 @@
 #include "plugin/npapi.h"
 #include "plugin/nptypes.h"
 #include "plugin/npruntime.h"
-
+#include "SqliteWraper.h"
 
 
 class CScriptableObject : public NPObject
@@ -31,6 +31,9 @@ public:
 	NPP m_pNpp;
 
 	NPObject * m_scriptObj;
+
+	CSqliteWraper m_sql;
+
 
 	int m_ljwName;
 };

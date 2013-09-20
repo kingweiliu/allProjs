@@ -56,9 +56,15 @@ bool CScriptableObject::Invoke(NPObject *npobj, NPIdentifier name, const NPVaria
 	NPUTF8 * strPropName = g_browser->utf8fromidentifier(name);
 	if (!strcmp(strPropName, "showName"))
 	{
-		if (argCount==1)
+		if (argCount==3)
 		{
-			MessageBoxA(NULL, args->value.stringValue.UTF8Characters, NULL, MB_OK);
+			((CScriptableObject*)npobj)->m_sql.AddChapter(args[0].value.stringValue.UTF8Characters, args[1].value.stringValue.UTF8Characters, args[2].value.stringValue.UTF8Characters);
+			//DWORD dwCnt = MultiByteToWideChar(CP_UTF8, NULL, args->value.stringValue.UTF8Characters, args->value.stringValue.UTF8Length, NULL, 0);
+			//TCHAR* szContent = new TCHAR[dwCnt+1];
+			//MultiByteToWideChar(CP_UTF8, NULL, args->value.stringValue.UTF8Characters, args->value.stringValue.UTF8Length, szContent, dwCnt+1);
+			//szContent[dwCnt] = 0;
+			//MessageBox(NULL, szContent, NULL, MB_OK);
+			//delete szContent;
 		}
 	}
 

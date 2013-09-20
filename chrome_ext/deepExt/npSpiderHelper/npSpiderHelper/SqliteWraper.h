@@ -10,6 +10,7 @@ public:
 
 	bool Check();
 	 
+	bool AddChapter(const char* url, const char* title, const char* content);
 
 	sqlite3 * m_db;
 	std::string m_strDBPath;
