@@ -4,13 +4,23 @@ chrome.browserAction.onClicked.addListener(function(){
 	plugin.newSection(1, 'haha');
 });
 
-var pageNeedCrawl =[];
+function Config(){
+	if(window.localStorage['menuUrl']){
+		var obj = new Object;
+		obj.menuUrl = window.localStorage['menuUrl'];
+		obj.contentUrlPattern = window.localStorage['contentUrlPattern'];
+		obj.name = window.localStorage['name'];
+		return obj;
+	}
+	return "";	
+}
 
+var pageNeedCrawl =[];
 var PageCrawler ={
 	cursor:0,
 	volumeNo:0,  //卷号
 	bRunning : false,
-
+	
 	trigger: function(){
 		if (this.bRunning) {
 			return ;
@@ -75,6 +85,18 @@ var PageCrawler ={
 }
 
 function getPageClass(url){
+
+	var config = Config();
+	if (!config) return "none";
+	if(config.menuUrl == url)
+		return "menuPage";
+
+	if (url.match(new RegExp(config.contentUrlPattern))) ;
+		return "contentPage";
+	
+	return "none";
+
+/*
 	var urlReg = /http:\/\/read.qidian.com\/BookReader\/\d*,\d*\.aspx/ ; 
 	if (url.match(urlReg)) {
 		return "contentPage";
@@ -82,6 +104,7 @@ function getPageClass(url){
 	if (url == "http://read.qidian.com/BookReader/2019.aspx") {
 		return "menuPage";
 	};
+*/
 }
 
 chrome.runtime.onMessage.addListener(
@@ -109,5 +132,7 @@ chrome.runtime.onMessage.addListener(
 		}		
 	}
 );
+
+
 
 alert('loaded ok');
