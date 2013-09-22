@@ -3,21 +3,31 @@
 // 		newChap    章节
 //		chapContent  章节正文
 
-// //if(false){
-if(window.location.href == "http://read.qidian.com/BookReader/2885992.aspx"){
 
-	function processChapterTitle(divTitle){
+chrome.runtime.sendMessage({
+	"url":window.location.href,
+	"cmd":'pageClass'
+}, function(res){
+	switch(res.pageCategory){
+		case 'menuPage':
+			analyzeMenuPage();
+		break;
+		case 'contentPage':
+			analyzeContent();
+		break;
+	}
+});
+
+var tmp ={
+	processChapterTitle: function(divTitle)	{
 		chrome.runtime.sendMessage({
 			'cmd':'newSection',
-			'title':divTitle.children[0].children[0].textContent
-		});
-	}
+			'title': divTitle
+		})
+	}, 
 
-	function processChapterList(children){
+	processChapterList: function(children){
 		for(var i=0; i<children.length; ++i){
-			console.log(i);
-			console.log(children[i].outerHTML);
-
 			var url = children[i].firstElementChild.href;
 			var chapTitle = children[i].textContent;
 			console.log(url + "---"+ chapTitle);
@@ -28,46 +38,45 @@ if(window.location.href == "http://read.qidian.com/BookReader/2885992.aspx"){
 			});
 		}
 	}
-	
+}
+
+function analyzeMenuPage(){	
 	var divContent = document.getElementById("content");
 	if(divContent){
 		for(var child in divContent.children){
+			try{
 			var divChild = divContent.children[child];
 			if(divChild.className == "box_title"){
-				processChapterTitle(divChild);
+				tmp.processChapterTitle(divChild.children[0].children[0].textContent);
 			}
 			else if(divChild.className == "box_cont"){
 				var clsList = divChild.getElementsByClassName('list');
 				if (clsList.length >0) {
-					processChapterList(clsList[0].children[0].children);
-				};
-				
-			}			
+					tmp.processChapterList(clsList[0].children[0].children);
+				};				
+			}	
+
+			}
+			catch(e){
+				alert(e);
+			}
 		}
 	}
 }
 
-var urlReg = /http:\/\/read.qidian.com\/BookReader\/\d*,\d*\.aspx/ ; 
-if (window.location.href.match(urlReg)) {
+//var urlReg = /http:\/\/read.qidian.com\/BookReader\/\d*,\d*\.aspx/ ; 
+function analyzeContent(){
 	var divContent = document.getElementById('content');
-	if (!divContent) {
-		return;
-	};
-
+	if (!divContent) 
+		return;	
 	var eleTitle = document.getElementById('lbChapterName');
-	if (!eleTitle) {
-		return;
-	};
-
-
+	if (!eleTitle) 
+		return;	
 	chrome.runtime.sendMessage({
 				'cmd':'chapContent',
 				'url':window.location.href,
 				'content':divContent.innerText,
-				'title':eleTitle.innerText,
-				'isText':true
+				'title':eleTitle.innerText				
 			});
-
-};
-
+}
 

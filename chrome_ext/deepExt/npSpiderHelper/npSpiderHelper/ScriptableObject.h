@@ -4,6 +4,7 @@
 #include "plugin/nptypes.h"
 #include "plugin/npruntime.h"
 #include "SqliteWraper.h"
+#include <map>
 
 
 class CScriptableObject : public NPObject
@@ -11,7 +12,7 @@ class CScriptableObject : public NPObject
 public:
 	CScriptableObject(NPP);
 	~CScriptableObject(void);
-
+	typedef bool (CScriptableObject::*pFuncCmd)(NPObject *npobj, NPIdentifier name, const NPVariant *args, uint32_t argCount, NPVariant *result);
 
 	static NPObject *Allocate(NPP npp, NPClass *aClass);
 	static void Deallocate(NPObject *npobj);
@@ -26,6 +27,7 @@ public:
 	static bool Enumeration(NPObject *npobj, NPIdentifier **value, uint32_t *count);
 	static bool Construct(NPObject *npobj, const NPVariant *args, uint32_t argCount, NPVariant *result);
 
+
 	static NPClass s_NPClass;
 
 	NPP m_pNpp;
@@ -36,5 +38,13 @@ public:
 
 
 	int m_ljwName;
+
+private:
+
+	bool newChap(NPObject *npobj, NPIdentifier name, const NPVariant *args, uint32_t argCount, NPVariant *result);
+	bool newSecion(NPObject *npobj, NPIdentifier name, const NPVariant *args, uint32_t argCount, NPVariant *result);
+
+	std::map<std::string, pFuncCmd> m_mapCmds;
+
 };
 
