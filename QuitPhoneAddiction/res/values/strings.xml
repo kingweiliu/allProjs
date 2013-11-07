@@ -7,5 +7,12 @@
     <string name="str_start">Start</string>
     <string name="str_stop">Stop</string>
     <string name="app_title">逃离手机</string>
+    <string name="duration_long">连续使用时间(分钟)</string>
+    <string name="setting_duration_long">设置连续时长(分钟)</string>
+    <string name="setting_sleep_time">设置睡觉时间</string>
+    <string name="setting_startup_limit">早晨开机使用限制</string>
+    <string name="save_setting">保存设置</string>
+    <string name="title_activity_remind_locker">RemindLocker</string>
+    <string name="sleep_remind">到点睡觉了。。。</string>
 
 </resources>

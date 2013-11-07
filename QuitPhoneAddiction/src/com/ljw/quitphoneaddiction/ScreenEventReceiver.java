@@ -5,18 +5,31 @@ import android.widget.Toast;
 import android.content.Intent;
 import android.util.Log;
 
+
 public class ScreenEventReceiver extends BroadcastReceiver {
 	
 	public QPAService myService;
 	public void onReceive(android.content.Context ctx, android.content.Intent intent){
-		//Intent sayHelloIntent=new Intent(ctx, MainActivity.class);
-		  /* sayHelloIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		   ctx.startActivity(sayHelloIntent);
-		   */
-		
-		//ctx.startService(new Intent(ctx, QPAService.class));
-		Log.i("ScreenEventReceiver", intent.getAction());	
-		myService.AddMessage(intent.getAction());
-		
+		Log.i(Common.LogTag, intent.getAction());	
+		if("android.intent.action.SCREEN_ON" == intent.getAction()){
+			
+		}
+		else if("android.intent.action.SCREEN_OFF" == intent.getAction()){
+			
+		}
+		else if("SleepTimer" == intent.getAction()){
+			try{
+			Intent intentLocker = new Intent(ctx, RemindLocker.class);
+			intentLocker.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			intentLocker.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			ctx.startActivity(intentLocker);
+			}
+			catch(Exception ex){
+				Log.e(Common.LogTag, ex.getMessage());
+			}
+		}
 	}
+	
+	
+	
 }
