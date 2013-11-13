@@ -55,6 +55,9 @@ public class MainActivity extends Activity implements android.view.View.OnClickL
 			 Log.e("ljw.qpa", e.toString());
 		 }
 		
+		 Button btn = (Button)findViewById(R.id.button1);
+		 btn.setOnClickListener(this);
+		 
 	}
 	
 	protected void onStop() {
@@ -84,8 +87,9 @@ public class MainActivity extends Activity implements android.view.View.OnClickL
 //		nMinute = setting.getInt("sleepTimeMinutes", 30);
 		if(qpaService != null){
 			TimePicker tp = (TimePicker)findViewById(R.id.timePick);
-			tp.setCurrentHour(qpaService.sleepSetting.Hour);
-			tp.setCurrentMinute(qpaService.sleepSetting.Minute);
+//			tp.setCurrentHour(qpaService.sleepSetting.Hour);
+//			tp.setCurrentMinute(qpaService.sleepSetting.Minute);
+			
 		}
 		
 	
@@ -112,7 +116,7 @@ public class MainActivity extends Activity implements android.view.View.OnClickL
 //		boolean bRet = edt.commit();
 		
 		if(qpaService != null){
-			qpaService.SetSleepTime(tp.getCurrentHour(),  tp.getCurrentMinute());
+			//qpaService.SetSleepTime(tp.getCurrentHour(),  tp.getCurrentMinute());
 		}
 		Log.e("ljw.qpa", "save to storage :");
 	}
@@ -126,7 +130,8 @@ public class MainActivity extends Activity implements android.view.View.OnClickL
 	
 	
 	public void onClick(View src) {
-		
+		Intent intent = new Intent (this, SettingMainActivity.class);
+		startActivity(intent);
 	}
 	
 	private ServiceConnection conn = new ServiceConnection() {        

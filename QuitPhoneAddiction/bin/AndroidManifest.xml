@@ -39,12 +39,19 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        
-        <receiver android:name=".ScreenEventReceiver" />  
+        <receiver android:name="com.ljw.quitphoneaddiction.ScreenEventReceiver" />
 
         <activity
             android:name="com.ljw.quitphoneaddiction.RemindLocker"
             android:label="@string/title_activity_remind_locker" >
+        </activity>
+        <activity
+            android:name="com.ljw.quitphoneaddiction.SettingMainActivity"
+            android:label="@string/title_activity_setting_main" >
+        </activity>
+        <activity
+            android:name="com.ljw.quitphoneaddiction.SettingSleepTimeActivity"
+            android:label="@string/title_activity_setting_sleep_time" >
         </activity>
     </application>
 
