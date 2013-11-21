@@ -9,81 +9,80 @@ package com.ljw.quitphoneaddiction;
 
 public final class R {
     public static final class array {
-        public static final int days=0x7f050000;
+        public static final int day_value=0x7f060001;
+        public static final int days=0x7f060000;
     }
     public static final class attr {
     }
     public static final class dimen {
-        public static final int abc=0x7f060002;
+        public static final int abc=0x7f070002;
         /**  Default screen margins, per the Android Design guidelines. 
 
          Customize dimensions originally defined in res/values/dimens.xml (such as
          screen margins) for sw720dp devices (e.g. 10" tablets) in landscape here.
     
          */
-        public static final int activity_horizontal_margin=0x7f060000;
-        public static final int activity_vertical_margin=0x7f060001;
-        public static final int itemHeight=0x7f060003;
+        public static final int activity_horizontal_margin=0x7f070000;
+        public static final int activity_vertical_margin=0x7f070001;
+        public static final int itemHeight=0x7f070003;
     }
     public static final class drawable {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_accept=0x7f0a0010;
-        public static final int action_settings=0x7f0a000f;
-        public static final int btnSave=0x7f0a0006;
-        public static final int button1=0x7f0a0007;
-        public static final int checkBox1=0x7f0a000e;
-        public static final int chkEnable=0x7f0a000c;
-        public static final int chkEnableMorning=0x7f0a0005;
-        public static final int edtNumber=0x7f0a0001;
-        public static final int listView1=0x7f0a0008;
-        public static final int numberPicker1=0x7f0a0009;
-        public static final int textView1=0x7f0a0000;
-        public static final int textView2=0x7f0a0002;
-        public static final int textView3=0x7f0a0004;
-        public static final int timePick=0x7f0a0003;
-        public static final int txtDown=0x7f0a000d;
-        public static final int txtSecTitle=0x7f0a000a;
-        public static final int txtTitle=0x7f0a000b;
+        public static final int action_accept=0x7f0b000c;
+        public static final int action_settings=0x7f0b000b;
+        public static final int button1=0x7f0b0001;
+        public static final int checkBox1=0x7f0b000a;
+        public static final int chkEnable=0x7f0b0008;
+        public static final int layout_time_picker_container=0x7f0b0003;
+        public static final int listView1=0x7f0b0002;
+        public static final int numberPicker1=0x7f0b0005;
+        public static final int textView1=0x7f0b0000;
+        public static final int time_picker=0x7f0b0004;
+        public static final int txtDown=0x7f0b0009;
+        public static final int txtSecTitle=0x7f0b0006;
+        public static final int txtTitle=0x7f0b0007;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int activity_remind_locker=0x7f030001;
         public static final int activity_setting_main=0x7f030002;
         public static final int activity_setting_sleep_time=0x7f030003;
-        public static final int temp_dialog_time_gap=0x7f030004;
-        public static final int temp_sleep_setting_checkbox=0x7f030005;
-        public static final int temp_sleep_setting_header=0x7f030006;
-        public static final int temp_sleep_setting_item=0x7f030007;
-        public static final int temp_sleep_setting_two_line=0x7f030008;
-        public static final int temp_time_gap_remind=0x7f030009;
+        public static final int layout_timp_pick_preference=0x7f030004;
+        public static final int temp_dialog_time_gap=0x7f030005;
+        public static final int temp_sleep_setting_checkbox=0x7f030006;
+        public static final int temp_sleep_setting_header=0x7f030007;
+        public static final int temp_sleep_setting_item=0x7f030008;
+        public static final int temp_sleep_setting_two_line=0x7f030009;
+        public static final int temp_time_gap_remind=0x7f03000a;
     }
     public static final class menu {
-        public static final int main=0x7f090000;
-        public static final int remind_locker=0x7f090001;
-        public static final int setting_main=0x7f090002;
-        public static final int setting_sleep_time=0x7f090003;
+        public static final int main=0x7f0a0000;
+        public static final int remind_locker=0x7f0a0001;
+        public static final int setting_main=0x7f0a0002;
+        public static final int setting_sleep_time=0x7f0a0003;
     }
     public static final class raw {
-        public static final int deep=0x7f040000;
+        public static final int deep=0x7f050000;
     }
     public static final class string {
-        public static final int action_settings=0x7f070001;
-        public static final int app_name=0x7f070000;
-        public static final int app_title=0x7f070005;
-        public static final int duration_long=0x7f070006;
-        public static final int hello_world=0x7f070002;
-        public static final int save_setting=0x7f07000a;
-        public static final int setting_duration_long=0x7f070007;
-        public static final int setting_sleep_time=0x7f070008;
-        public static final int setting_startup_limit=0x7f070009;
-        public static final int sleep_remind=0x7f07000c;
-        public static final int str_start=0x7f070003;
-        public static final int str_stop=0x7f070004;
-        public static final int title_activity_remind_locker=0x7f07000b;
-        public static final int title_activity_setting_main=0x7f07000d;
-        public static final int title_activity_setting_sleep_time=0x7f07000e;
+        public static final int action_settings=0x7f080001;
+        public static final int app_name=0x7f080000;
+        public static final int app_title=0x7f080005;
+        public static final int duration_long=0x7f080006;
+        public static final int hello_world=0x7f080002;
+        public static final int save_setting=0x7f08000a;
+        public static final int setting_duration_long=0x7f080007;
+        public static final int setting_sleep_time=0x7f080008;
+        public static final int setting_startup_limit=0x7f080009;
+        public static final int sleep_alarm_enable=0x7f08000f;
+        public static final int sleep_remind=0x7f08000c;
+        public static final int str_start=0x7f080003;
+        public static final int str_stop=0x7f080004;
+        public static final int title_activity_remind_locker=0x7f08000b;
+        public static final int title_activity_setting_main=0x7f08000d;
+        public static final int title_activity_setting_sleep_time=0x7f08000e;
     }
     public static final class style {
         /** 
@@ -107,10 +106,14 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f080000;
+        public static final int AppBaseTheme=0x7f090000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f080001;
+        public static final int AppTheme=0x7f090001;
+    }
+    public static final class xml {
+        public static final int setting=0x7f040000;
+        public static final int setting_sleep=0x7f040001;
     }
 }

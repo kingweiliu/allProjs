@@ -1,10 +1,14 @@
 package com.ljw.quitphoneaddiction;
 
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
@@ -16,11 +20,33 @@ public class RemindLocker extends Activity {
 
 	boolean canClose = false;
 	
+	private PendingIntent pi = null;
+	String strCategory = null;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_remind_locker);
 		Log.d(Common.LogTag, "Remind oncreat");
+		Intent it =  this.getIntent();
+		strCategory = it.getStringExtra("category");
+		
+		TextView tv = (TextView)findViewById(R.id.textView1);
+		tv.setText(strCategory);
+		if(strCategory.equals(Common.LockTypeCareEye)){
+			//¶¨Ê±Ïû³ý
+			Timer t = new Timer();
+			TimerTask tt = new TimerTask() {
+				
+				@Override
+				public void run() {
+					canClose = true;
+					RemindLocker.this.finish();					
+				}
+			};
+			
+			t.schedule(tt, 30*1000);
+		}
 		
 		Button btn= (Button)findViewById(R.id.button1);
 		btn.setOnClickListener(new Button.OnClickListener(){
@@ -30,18 +56,6 @@ public class RemindLocker extends Activity {
 				finish();
 			}
 		});
-		
-		if(Common.service != null){
-			Common.service.setRemindLockerShow(Common.service.getRemindLockerShow()+1);
-			TextView tv = (TextView )findViewById(R.id.textView1);
-			if(tv != null )
-				tv.setText(""+ Common.service.getRemindLockerShow());
-			
-			
-		}
-		
-		
-		
 	}
 
 	@Override
@@ -65,26 +79,27 @@ public class RemindLocker extends Activity {
 	@Override
 	protected void onStop(){
 		Log.d(Common.LogTag, "Remind onStop");
-		if(Common.service != null){
-			Common.service.setRemindLockerShow(Common.service.getRemindLockerShow()-1);
-		}
 		super.onStop();
 	}
 	
 	@Override
-	protected void onPause(){
-		
-		if(!canClose){		
-			Timer t = new Timer();
-	        t.schedule(new TimerTask() {
+	protected void onResume(){
+		super.onResume();
+		Intent amIntent = new Intent(QpaApplication.getAppContext(), ScreenEventReceiver.class);
+		amIntent.setAction(Common.LockTypeLock);		 
+		pi = PendingIntent.getBroadcast(QpaApplication.getAppContext(), 0, amIntent, 0);	
+		AlarmManager am = (AlarmManager)QpaApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
+		am.cancel(pi); 
+	}
 	
-	            @Override //dashboard.class is your main class
-	            public void run() {
-	                Intent dialogIntent = new Intent(getBaseContext(), RemindLocker.class);
-				    dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				    getApplication().startActivity(dialogIntent);
-	            }
-	        }, 10);
+	@Override
+	protected void onPause(){		
+		if(!canClose){
+			Intent amIntent = new Intent(QpaApplication.getAppContext(), ScreenEventReceiver.class);
+			amIntent.setAction(Common.LockTypeLock);		 
+			pi = PendingIntent.getBroadcast(QpaApplication.getAppContext(), 0, amIntent, 0);	
+			AlarmManager am = (AlarmManager)QpaApplication.getAppContext().getSystemService(Context.ALARM_SERVICE);
+			am.setRepeating(AlarmManager.ELAPSED_REALTIME, 0, 500, pi); 
 		}
         super.onPause();
 	}

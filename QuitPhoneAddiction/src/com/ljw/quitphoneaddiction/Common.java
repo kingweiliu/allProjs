@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class Common {
 	static String LogTag = "QuitPhone";
 	
-	static QPAService service = null;
+	//static QPAService service = null;
 	
 	static String 	KeySleepSetting = "kss";
 	static String 	KeySleepEnable = "kse";
@@ -16,6 +16,12 @@ public class Common {
 	static String 	KeyCareEyeSetting = "kces";
 	static String 	KeyCareEyeEnable = "kcee";
 	static String 	KeyCareEyeDuration = "kced";
+	
+	
+	static String   LockTypeSleep="lts";
+	static String 	LockTypeCareEye = "ltce";
+	static String 	LockTypeLock = "ltl";
+	
 	
 	public static String  ConvertToDays(int n){		
 		String str = "";

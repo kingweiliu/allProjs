@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory 
+        android:title="睡眠时间设置">
+       
+        <PreferenceScreen
+                android:key="screen_preference"
+                android:title="22:30"
+                android:summary="周一"
+                >
+            <CheckBoxPreference
+                    android:key="sleep_alarm_enable_1"
+                    android:title="@string/sleep_alarm_enable"
+                    android:summary="klm" />
+             
+             <ljw.control.TimePickerPereference
+                 android:key="sleep_alarm_time_1"
+                android:title="22:30"
+                android:summary="ljw"/>                 
+         	<MultiSelectListPreference
+                android:key="sleep_alarm_days_1"
+                android:entries="@array/days"
+                android:entryValues="@array/day_value"  
+                android:title="重复"
+                android:summary="无"                                      
+                />                
+        </PreferenceScreen>
+        <PreferenceScreen
+                android:key="screen_preference"
+                android:title="22:30"
+                android:summary="周一">
+            <CheckBoxPreference
+                    android:key="sleep_alarm_enable_2"
+                    android:title="@string/sleep_alarm_enable"
+                    android:summary="klm" />
+             
+             <ljw.control.TimePickerPereference
+                 android:key="sleep_alarm_time_2"
+                android:title="22:30"
+                android:summary="ljw"/>                 
+         	<MultiSelectListPreference
+                android:key="sleep_alarm_days_2"
+                android:entries="@array/days"
+                android:entryValues="@array/day_value"  
+                android:title="重复"
+                android:summary="无"                                      
+                />                
+        </PreferenceScreen>
+    </PreferenceCategory>
+    
+    <PreferenceCategory android:title="护眼提醒">
+         <PreferenceScreen
+                android:key="screen_preference"
+                android:title="35"
+                android:summary="周一">
+            <CheckBoxPreference
+                    android:key="care_eye_enable_2"
+                    android:title="@string/sleep_alarm_enable"
+                    android:summary="klm" />
+             
+             <ljw.control.TimePickerPereference
+                 android:key="care_eye_time_2"
+                android:title="22:30"
+                android:summary="ljw"/>
+        </PreferenceScreen>
+    </PreferenceCategory>
+    
+</PreferenceScreen>

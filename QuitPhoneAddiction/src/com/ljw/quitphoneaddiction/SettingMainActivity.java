@@ -46,13 +46,15 @@ public class SettingMainActivity extends ListActivity {
 	
 	@Override
 	public boolean onOptionsItemSelected(android.view.MenuItem item){
+		if(item.getItemId() == R.id.action_accept){
+			RulesManager.Instance().ResetRule();
+		}
 		finish();
 		return false;
 	}
 	
 	protected void onListItemClick(ListView l, View v, int position, long id){
-		if(position == 4){
-			
+		if(position == 4){			
 			CareEyeEntity cee = (CareEyeEntity)layoutData.get(position).tag;			
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);		
 			builder.setTitle("连续使用时长");	
@@ -77,7 +79,7 @@ public class SettingMainActivity extends ListActivity {
 			Node n =  layoutData.get(position);
 			if(n.tag.getClass() == SleepSettingEntity.class){
 				SleepSettingEntity sse = (SleepSettingEntity)n.tag;
-				bd.putBoolean(Common.KeySleepEnable, sse.Enabled);
+				bd.putBoolean(Common.KeySleepEnable, sse.getEnable());
 				bd.putInt(Common.KeySleepTimeHour, sse.Hour);
 				bd.putInt(Common.KeySleepTimeMinute, sse.Minute);
 				bd.putInt(Common.KeySleepDays, sse.Days);				
@@ -102,8 +104,8 @@ public class SettingMainActivity extends ListActivity {
 			CareEyeEntity cee = (CareEyeEntity)layoutData.get(pos).tag;
 			cee.Duration = duration;
 			layoutData.get(pos).setTag(cee);
-			SettingMainActivity.this.sa.notifyDataSetChanged();
-			
+			cee.SaveData();
+			SettingMainActivity.this.sa.notifyDataSetChanged();			
 		}
 		
 	}
@@ -114,11 +116,12 @@ public class SettingMainActivity extends ListActivity {
 			
 			SleepSettingEntity sse = (SleepSettingEntity)layoutData.get(requestCode).tag;						
 			Bundle bd = data.getBundleExtra(Common.KeySleepSetting);
-			sse.Enabled = bd.getBoolean(Common.KeySleepEnable);
+			sse.setEnable(bd.getBoolean(Common.KeySleepEnable));
 			sse.Hour = bd.getInt(Common.KeySleepTimeHour);
 			sse.Minute = bd.getInt(Common.KeySleepTimeMinute);
 			sse.Days = bd.getInt(Common.KeySleepDays);
 			layoutData.get(requestCode).setTag(sse);
+			sse.SaveData();
 			sa.notifyDataSetChanged();
 			Log.e(Common.LogTag, "result ok");
 		}
@@ -132,49 +135,34 @@ public class SettingMainActivity extends ListActivity {
 			MainTitle = st;
 		}
 		
-		public Node(int cat, SleepSettingEntity sse){
-			MainTitle = sse.Hour+":"+sse.Minute;
-			SubTitle = Common.ConvertToDays(sse.Days);
-			Enable= sse.Enabled;
+		public Node(int cat, IHeadUpSetting sse){
+			MainTitle = sse.getMainTitle();
+			SubTitle = sse.getSubTitle();
+			
 			category= cat;	
 			tag = sse;
 		}
 		
-		public Node(int cat , CareEyeEntity cee){
-			tag = cee;
-			SubTitle = "";
-		}
-		
-		public void setTag(SleepSettingEntity sse){
-			MainTitle = sse.Hour+":"+sse.Minute;
-			SubTitle = Common.ConvertToDays(sse.Days);
-			Enable= sse.Enabled;
-		}
-		
-		public void setTag(CareEyeEntity cee){
-			MainTitle = ""+cee.Duration;			
-			SubTitle = "";
+
+		public void setTag(IHeadUpSetting hus){
+			MainTitle = hus.getMainTitle();
+			SubTitle = hus.getSubTitle();
+			tag = hus;			
 		}
 		
 		public String MainTitle;
 		public String SubTitle;
-		public boolean Enable;	
-		public Object tag;
+		
+		public IHeadUpSetting tag;
 	}
 	
 	public class SettingAdapter extends BaseAdapter{		
 		public SettingAdapter(){
 			layoutData.add(new Node(1, "睡眠时间"));	
-			if(Common.service != null){
-				for(int i =0;i<2; ++i){
-					SleepSettingEntity sse = Common.service.sleepSettings[i];
-					layoutData.add(new Node(2, sse));							
-				}				
-			}
+			layoutData.add(new Node(2, RulesManager.Instance().sse[0]));
+			layoutData.add(new Node(2, RulesManager.Instance().sse[1]));
 			layoutData.add(new Node(3, "护眼模式"));
-			if(Common.service != null){
-				layoutData.add(new Node(6, Common.service.careEyeSetting));
-			}			
+			layoutData.add(new Node(6, RulesManager.Instance().cee));
 		}		
 		
 		@Override
@@ -214,7 +202,7 @@ public class SettingMainActivity extends ListActivity {
 				TextView tvDown = (TextView) v.findViewById(R.id.txtDown);
 				tvDown.setText(layoutData.get(pos).SubTitle);		
 				CheckBox cb = (CheckBox)v.findViewById(R.id.chkEnable);
-				cb.setChecked(layoutData.get(pos).Enable);
+				cb.setChecked(layoutData.get(pos).tag.getEnable());
 				cb.setOnCheckedChangeListener(new CheckChangeListen(pos));
 			}
 			
@@ -232,9 +220,7 @@ public class SettingMainActivity extends ListActivity {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
-				SleepSettingEntity sse = (SleepSettingEntity)layoutData.get(pos).tag;
-				sse.Enabled = isChecked;
-				layoutData.get(pos).setTag(sse);
+				layoutData.get(pos).tag.setEnable(isChecked);				
 				SettingMainActivity.this.sa.notifyDataSetChanged();				
 			}
 			

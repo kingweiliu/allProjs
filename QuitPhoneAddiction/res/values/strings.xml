@@ -16,5 +16,7 @@
     <string name="sleep_remind">到点睡觉了。。。</string>
     <string name="title_activity_setting_main">设置</string>
     <string name="title_activity_setting_sleep_time">闹钟设置</string>
+    <string name="sleep_alarm_enable">启用</string>
 
+    
 </resources>
