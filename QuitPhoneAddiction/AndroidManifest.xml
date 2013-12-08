@@ -15,9 +15,11 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" 
-        android:name=".QpaApplication">
+        android:name="ljw.quitphoneaddiction.QpaApplication"
+        android:debuggable="true"       
+        >
         <activity
-            android:name="com.ljw.quitphoneaddiction.MainActivity"
+            android:name="ljw.quitphoneaddiction.MainActivity"
             android:label="@string/app_title" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +29,7 @@
         </activity>
 
         <service
-            android:name="com.ljw.quitphoneaddiction.QPAService"
+            android:name="ljw.quitphoneaddiction.QPAService"
             android:enabled="true" >
             <intent-filter>
                 <action android:name="com.ljw.quitphoneaddiction.bindService" >
@@ -35,12 +37,12 @@
             </intent-filter>
         </service>
 
-        <receiver android:name="com.ljw.quitphoneaddiction.BootCompleteReceiver" >
+        <receiver android:name="ljw.quitphoneaddiction.BootCompleteReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.ljw.quitphoneaddiction.ScreenEventReceiver" >
+        <receiver android:name="ljw.quitphoneaddiction.ScreenEventReceiver" >
             <intent-filter >
                 <action android:name="SleepTimer"/>
                 <action android:name="CheckLock"/>
@@ -48,20 +50,20 @@
         </receiver>
 
         <activity
-            android:name="com.ljw.quitphoneaddiction.RemindLocker"
+            android:name="ljw.quitphoneaddiction.RemindLockerActivity"
             android:launchMode="singleInstance"
             android:label="@string/title_activity_remind_locker" >
         </activity>
         <activity
-            android:name="com.ljw.quitphoneaddiction.SettingMainActivity"
+            android:name="ljw.quitphoneaddiction.SettingMainActivity"
             android:label="@string/title_activity_setting_main" >
         </activity>
         <activity
-            android:name="com.ljw.quitphoneaddiction.SettingSleepTimeActivity"
+            android:name="ljw.quitphoneaddiction.SettingSleepTimeActivity"
             android:label="@string/title_activity_setting_sleep_time" >
         </activity>
         <activity 
-            android:name="com.ljw.quitphoneaddiction.PreferenceSettingActivity">
+            android:name="ljw.quitphoneaddiction.PreferenceSettingActivity">
             
         </activity>
     </application>

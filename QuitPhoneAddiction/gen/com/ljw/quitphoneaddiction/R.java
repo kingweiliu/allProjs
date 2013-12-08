@@ -15,6 +15,7 @@ public final class R {
     public static final class attr {
     }
     public static final class dimen {
+        public static final int CountDownTimer=0x7f070004;
         public static final int abc=0x7f070002;
         /**  Default screen margins, per the Android Design guidelines. 
 
@@ -30,19 +31,24 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_accept=0x7f0b000c;
-        public static final int action_settings=0x7f0b000b;
+        public static final int action_accept=0x7f0b0011;
+        public static final int action_settings=0x7f0b0010;
+        public static final int btnTagMusic=0x7f0b0002;
         public static final int button1=0x7f0b0001;
-        public static final int checkBox1=0x7f0b000a;
-        public static final int chkEnable=0x7f0b0008;
-        public static final int layout_time_picker_container=0x7f0b0003;
-        public static final int listView1=0x7f0b0002;
-        public static final int numberPicker1=0x7f0b0005;
-        public static final int textView1=0x7f0b0000;
-        public static final int time_picker=0x7f0b0004;
-        public static final int txtDown=0x7f0b0009;
-        public static final int txtSecTitle=0x7f0b0006;
-        public static final int txtTitle=0x7f0b0007;
+        public static final int checkBox1=0x7f0b000f;
+        public static final int chkEnable=0x7f0b000d;
+        public static final int imageView1=0x7f0b0000;
+        public static final int img=0x7f0b0004;
+        public static final int layout_time_picker_container=0x7f0b0008;
+        public static final int listView1=0x7f0b0007;
+        public static final int numberPicker1=0x7f0b000a;
+        public static final int progressBar1=0x7f0b0006;
+        public static final int textView1=0x7f0b0003;
+        public static final int time_picker=0x7f0b0009;
+        public static final int txtCountDown=0x7f0b0005;
+        public static final int txtDown=0x7f0b000e;
+        public static final int txtSecTitle=0x7f0b000b;
+        public static final int txtTitle=0x7f0b000c;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -65,6 +71,19 @@ public final class R {
     }
     public static final class raw {
         public static final int deep=0x7f050000;
+        public static final int ditouzu=0x7f050001;
+        public static final int dtz_img1=0x7f050002;
+        public static final int dtz_img10=0x7f050003;
+        public static final int dtz_img11=0x7f050004;
+        public static final int dtz_img12=0x7f050005;
+        public static final int dtz_img2=0x7f050006;
+        public static final int dtz_img3=0x7f050007;
+        public static final int dtz_img4=0x7f050008;
+        public static final int dtz_img5=0x7f050009;
+        public static final int dtz_img6=0x7f05000a;
+        public static final int dtz_img7=0x7f05000b;
+        public static final int dtz_img8=0x7f05000c;
+        public static final int dtz_img9=0x7f05000d;
     }
     public static final class string {
         public static final int action_settings=0x7f080001;
