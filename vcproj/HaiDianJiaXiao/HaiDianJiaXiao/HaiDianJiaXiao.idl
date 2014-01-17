@@ -1,0 +1,34 @@
+// HaiDianJiaXiao.idl : IDL source for HaiDianJiaXiao
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (HaiDianJiaXiao.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(985D93B6-98ED-4733-B865-85F5A29CA83D),
+	dual,
+	nonextensible,
+	pointer_default(unique)
+]
+interface Ihjqp : IDispatch{
+};
+[
+	uuid(51D21184-FCC7-4A00-BC02-5A9F8D5CB132),
+	version(1.0),
+]
+library HaiDianJiaXiaoLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(DA89CB70-D040-4CAC-A2FF-2CAB222CE8D2)		
+	]
+	coclass hjqp
+	{
+		[default] interface Ihjqp;
+	};
+};
+
