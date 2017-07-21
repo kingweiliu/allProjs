@@ -1,0 +1,18 @@
+{
+	"manifest_version": 2,
+	"background": {
+		"page": "bkg.html"
+	},
+	"options_page": "options.html",
+	"description": "an extension to test how content js functions",
+	"version": "1.0",
+	"name": "ljw's extension",
+	"browser_action": {
+		"default_icon": "icon.png"
+	},
+	"content_scripts": [{
+		"matches": ["http://idea.baidu.com/*"],
+		"js": ["jquery-3.2.1.min.js","contentJS.js"]
+	}]
+	
+}
