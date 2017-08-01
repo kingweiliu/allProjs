@@ -5,13 +5,14 @@
 
 var t1 = window.setTimeout(hello,2000); 
 function hello(){
+	reg=new RegExp("\\n|\\r","g");
 	d = {
-		"comment":$("div.detail-comment").text(),
-		"cate":$("div.detail-product-type").text(),
+		//"comment":$("div.detail-comment").text().replace(reg,""),
+		"cate":$("div.detail-product-type").text().replace(reg,""),
 		"title" :$("div.detail-title").text(), 
-		"summary":$("div.detail-summary").text(),
-		"detail-verify":$("div.detail-verify").text(),
-		"detail":$("div.detail-background-desc").text()
+		"summary":$("div.detail-summary").text().replace(reg,""),
+		"detail-verify":$("div.detail-verify").text().replace(reg,""),
+		"detail":$("div.detail-background-desc").text().replace(reg,"")
 	};
 	alert(JSON.stringify(d));
 chrome.runtime.sendMessage({

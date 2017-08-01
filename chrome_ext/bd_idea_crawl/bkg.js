@@ -107,9 +107,21 @@ function getPageClass(url){
 */
 }
 
+function savetext(info)
+{
+    var jax = new XMLHttpRequest();
+    jax.open("POST","http://127.0.0.1:5000/");
+    jax.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+    jax.send("text="+info);
+    jax.onreadystatechange = function() { if(jax.readyState==4) { alert(jax.responseText);  }}
+}
+
 chrome.runtime.onMessage.addListener(
 	function (request, sender, sendResponse) {	
-		alert(JSON.stringify(request));
+		//alert(JSON.stringify(request.data));
+		alert(request.data.detail);
+
+		savetext(request.data.detail);
 		switch(request.cmd){
 			case 'chapContent':   //章节正文
 				PageCrawler.OnContentCrawled(request, sender);
