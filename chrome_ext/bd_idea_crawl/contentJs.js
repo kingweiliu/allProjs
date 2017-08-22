@@ -1,11 +1,14 @@
 
-// cmd: newSection 新卷
-// 		newChap    章节
-//		chapContent  章节正文
+// cmd: menu 新卷
+// 		itemDetail  详情页
+//      pageClass   请求页面分类命令
+// 		finish 		当前页面处理完成
 
-var t1 = window.setTimeout(hello,2000); 
+// var t1 = window.setTimeout(hello,2000); 
 function hello(){
 	reg=new RegExp("\\n|\\r","g");
+	// get all links in this page
+	url_list = document.body.innerHTML.match(/http:\/\/[^\s<>]*\b/g); 
 	d = {
 		//"comment":$("div.detail-comment").text().replace(reg,""),
 		"cate":$("div.detail-product-type").text().replace(reg,""),
@@ -14,21 +17,22 @@ function hello(){
 		"detail-verify":$("div.detail-verify").text().replace(reg,""),
 		"detail":$("div.detail-background-desc").text().replace(reg,"")
 	};
-	alert(JSON.stringify(d));
-chrome.runtime.sendMessage({
-	"url":window.location.href,
-	"cmd":'pageClass',
-	"data": d
-}, function(res){
-	switch(res.pageCategory){
-		case 'menuPage':
-			analyzeMenuPage();
-		break;
-		case 'contentPage':
-			analyzeContent();
-		break;
-	}
-});
+	console.log(JSON.stringify(d));
+	chrome.runtime.sendMessage({
+		"url":window.location.href,
+		"cmd":'pageClass',
+		"data": d,
+		"sub_links" : url_list
+	}, function(res){
+		switch(res.pageCategory){
+			case 'menuPage':
+				analyzeMenuPage();
+			break;
+			case 'contentPage':
+				analyzeContent();
+			break;
+		}
+	});
 }
 
 
@@ -73,7 +77,7 @@ function analyzeMenuPage(){
 
 			}
 			catch(e){
-				alert(e);
+				// alert(e);
 			}
 		}
 	}
@@ -92,6 +96,68 @@ function analyzeContent(){
 				'url':window.location.href,
 				'content':divContent.innerText,
 				'title':eleTitle.innerText				
-			});
+	});
 }
 
+
+// 解析页面的数据
+function analyzeIdeaContent() {
+	url_list = document.body.innerHTML.match(/http:\/\/[^\s<>]*\b/g); 
+	reg=new RegExp("\\n|\\r","g");
+	d = {
+		//"comment":$("div.detail-comment").text().replace(reg,""),
+		"cate":$("div.detail-product-type").text().replace(reg,""),
+		"title" :$("div.detail-title").text(), 
+		"summary":$("div.detail-summary").text().replace(reg,""),
+		"detail-verify":$("div.detail-verify").text().replace(reg,""),
+		"detail":$("div.detail-background-desc").text().replace(reg,"")
+	};
+	// console.log(JSON.stringify(d));
+	chrome.runtime.sendMessage({
+		"url":window.location.href,
+		"cmd":'deatilItem',
+		"data": d
+	});
+	// alert(d);
+	finish();
+}
+
+function finish() {
+	chrome.runtime.sendMessage({
+		"url":window.location.href,
+		"cmd":'finish'
+	});
+}
+
+// 请求页面的类型，依次进行下一步的动作
+function init(){	
+	// get all links in this page
+	url_list = document.body.innerHTML.match(/http:\/\/[^\s<>]*\b/g); 
+	url_list = $("a");
+	var b = [];
+	for (var i = url_list.length - 1; i >= 0; i--) {
+
+		console.log(url_list[i]);
+		if (url_list[i].href.length > 15){
+			b.push(url_list[i].href);
+		}
+	}
+
+	chrome.runtime.sendMessage({
+		"url":window.location.href,
+		"cmd":'pageClass',
+		"sub_links" : b
+	}, function(res){
+		switch(res.pageCategory){
+			case 'detailPage':
+				analyzeIdeaContent();
+				break;
+			default:
+				finish();
+				break;
+		}
+	});
+}
+
+
+var t1 = window.setTimeout(init,3000); 

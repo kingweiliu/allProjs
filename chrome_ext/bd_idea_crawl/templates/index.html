@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+function clk() {
+	var jax = new XMLHttpRequest();
+    jax.open("POST","http://127.0.0.1:5000/abc");
+    jax.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+    jax.send("text=abc");
+    jax.onreadystatechange = function() { 
+    	if(jax.readyState==4 && jax.status==200) 
+		{ 
+			alert(jax.responseText); 
+		}
+    }
+    alert(location);
+}
+</script>
+	<title>hello</title>
+</head>
+<body>
+the one
+<form target="/abc">
+	<input type="button" name="a" value="hahaha" onclick="clk();"/>
+</form>
+</body>
+</html>

@@ -1,26 +1,22 @@
 alert('ko');
 
 function saveData(){
-	alert(1);
-	var edtName = document.getElementById('edtNovelName');
-	var edtMenuUrl = document.getElementById('edtNovelUrl');
-	var edtContentUrl = document.getElementById('edtContentUrl');
-	window.localStorage['name'] = edtName.value;
-	window.localStorage['menuUrl'] = edtMenuUrl.value;
-	window.localStorage['contentUrlPattern'] = edtContentUrl.value;
-
+	var edtMenuUrl = document.getElementById('edt_menu_url_pattern');
+	var edtContentUrl = document.getElementById('edt_item_detail_url_pattern');
+	
+	window.localStorage['menuUrlPattern'] = edtMenuUrl.value;
+	window.localStorage['detailUrlPattern'] = edtContentUrl.value;
+	alert("save ok");
 }
 
 function readData(){
-	var edtName = document.getElementById('edtNovelName');
-	var edtMenuUrl = document.getElementById('edtNovelUrl');
-	var edtContentUrl = document.getElementById('edtContentUrl');
-	if(window.localStorage['name'])
-	  	edtName.value =window.localStorage['name'];
-	if(window.localStorage['menuUrl'])
-	 	edtMenuUrl.value =  	window.localStorage['menuUrl'] ;
-	if(window.localStorage['contentUrlPattern'])
-	 	edtContentUrl.value = 	window.localStorage['contentUrlPattern'] ;
+	
+	var edt_menu_url_pattern = document.getElementById('edt_menu_url_pattern');
+	var edt_item_detail_url_pattern = document.getElementById('edt_item_detail_url_pattern');
+	if(window.localStorage['menuUrlPattern'])
+	  	edt_menu_url_pattern.value =window.localStorage['menuUrlPattern'];
+	if(window.localStorage['detailUrlPattern'])
+	 	edt_item_detail_url_pattern.value =  	window.localStorage['detailUrlPattern'] ;
 }
 
 window.onload = function(){
