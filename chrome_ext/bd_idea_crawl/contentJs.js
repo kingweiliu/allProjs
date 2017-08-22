@@ -15,7 +15,8 @@ function hello(){
 		"title" :$("div.detail-title").text(), 
 		"summary":$("div.detail-summary").text().replace(reg,""),
 		"detail-verify":$("div.detail-verify").text().replace(reg,""),
-		"detail":$("div.detail-background-desc").text().replace(reg,"")
+		"detail":$("div.detail-background-desc").text().replace(reg,""),
+		
 	};
 	console.log(JSON.stringify(d));
 	chrome.runtime.sendMessage({

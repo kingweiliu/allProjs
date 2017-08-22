@@ -1,4 +1,5 @@
-chrome.browserAction.onClicked.addListener(function(){	
+
+function try_flask_server() {
 	var jax = new XMLHttpRequest();
     jax.open("POST","http://127.0.0.1:5000/abc");
     jax.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
@@ -11,29 +12,37 @@ chrome.browserAction.onClicked.addListener(function(){
     }
     alert(location);
     alert(JSON.stringify(getConfig()));
-});
+}
+
+var pageNeedCrawl =[];
 
 function getConfig(){
 	if(window.localStorage['menuUrlPattern']){
 		var obj = new Object;
 		obj.menuUrlPattern = window.localStorage['menuUrlPattern'];
 		obj.detailUrlPattern = window.localStorage['detailUrlPattern'];
-		
+		obj.startUrl = window.localStorage['startUrl'];
+		obj.visitedUrl = window.localStorage['visitedUrl'];
 		return obj;
 	}
 	return "";	
 }
 
-var pageNeedCrawl =[];
+visitedUrls = new Set();
+
 var PageCrawler ={
 	cursor:0,
 	url_dict : new Set(),
 	concurrent : 5,
+    config : getConfig(),
+    running : false,
 
 	trigger: function(){
 		if (this.cursor >= this.concurrent) {
 			return ;
 		};
+		if (!this.running)
+			return;
 		this.cursor ++;
 		this.start();
 	},
@@ -44,51 +53,15 @@ var PageCrawler ={
 		};
 
 		//create tab to crawl
-		current = pageNeedCrawl.pop();
+		current_url = pageNeedCrawl.pop();
+		if (current_url.indexOf("attachment") > 0)
+			this.cursor --;
 		chrome.tabs.create({
-			url:current.url,
+			url:current_url,
 			active:false
 		}, function(tab){
 			// pageNeedCrawl[this.cursor].tabId = tab.id;  //make the correspondence.
 		});
-	},
-
-	OnContentCrawled: function(request, sender){  //正文抓取后触发，保存后关闭当前的页面，然后打开另外一个页面。
-		if (request.url == pageNeedCrawl[this.cursor].url) 
-		  	this.saveChapToDisk(request.url, request.title, request.content, pageNeedCrawl[this.cursor].vid)
-		var mycars = new Array();
-		mycars[0] = sender.tab.id;
-		chrome.tabs.remove(mycars);
-
-		this.start();
-	},
-
-	onItemDetailPage: function(pageInfo){  //增加需要正文抓取的url
-		/*
-			{
-				url,
-				title,
-			}
-		*/
-		pageInfo.vid = this.volumeNo;
-		pageNeedCrawl.push(pageInfo);
-		this.trigger();
-	},
-
-	OnNewSection: function(volumeName){ //新卷
-		this.saveVolumeToDisk(volumeName);
-	},
-
-	saveChapToDisk: function(url, title, content, vid){ //保存正文
-		var plugin = document.getElementById('pluginObj');	
-		plugin.newChap(url, title, content, vid);
-		return true;
-	},
-
-	saveVolumeToDisk: function(volumeName){  //保存章节信息
-		var plugin =  	document.getElementById('pluginObj');			
-		this.volumeNo ++;
-		plugin.newSection(this.volumeNo, volumeName);
 	},
 
 	addCrawlUrls: function(urls) {
@@ -98,9 +71,7 @@ var PageCrawler ={
 
 			var pc = getPageClass(urls[i]);
 			if (pc  != "none" && !this.url_dict.has(urls[i])) {
-				var pageInfo = {}
-				pageInfo.url = urls[i];
-				pageNeedCrawl.push(pageInfo);
+				pageNeedCrawl.push(urls[i]);
 				this.url_dict.add(urls[i]);
 				console.log("need to crawl:" +pc + ":" + urls[i]);
 			}
@@ -109,10 +80,10 @@ var PageCrawler ={
 		this.trigger();
 	},
 
-	onFinish: function(request, sender){  //正文抓取后触发，保存后关闭当前的页面，然后打开另外一个页面。
+	onFinish: function(request, sender){  //����ץȡ�󴥷��������رյ�ǰ��ҳ�棬Ȼ�������һ��ҳ�档
 		// if (request.url == pageNeedCrawl[this.cursor].url) 
 		//   	this.saveChapToDisk(request.url, request.title, request.content, pageNeedCrawl[this.cursor].vid)
-		if (request.url != "http://idea.baidu.com/#/home") {
+		if (request.url != this.config.startUrl) {
 			var mycars = new Array();
 			mycars[0] = sender.tab.id;
 			chrome.tabs.remove(mycars);	
@@ -182,13 +153,15 @@ chrome.runtime.onMessage.addListener(
 		// savetext(JSON.stringify(request.data));
 		// alert(request.sub_links);
 		switch(request.cmd){
-			case 'deatilItem':   //章节正文
+			case 'deatilItem':   // ����ҳ
+				data = request.data;
+				data.url = request.url;
 				savedataLocalhost(JSON.stringify(request.data));
 
 				//var plugin =	document.getElementById('pluginObj');	
 				//plugin.showName(request.url, request.title, request.content);
 				break;
-			case 'pageClass': 	//url的页面分类
+			case 'pageClass': 	//url��ҳ�����
 				PageCrawler.addCrawlUrls(request.sub_links);
 				sendResponse({
 					"pageCategory": getPageClass(request.url)
@@ -200,5 +173,28 @@ chrome.runtime.onMessage.addListener(
 		}
 	}
 );
+
+chrome.browserAction.onClicked.addListener(function(){	
+	var config = getConfig();
+	
+	PageCrawler.running = !PageCrawler.running;
+	if (!PageCrawler.running) {
+		// save visited item detail history
+		vistiedItemUrlsStr = JSON.stringify(visitedUrls);
+		window.localStorage.setItem('visitedUrls', vistiedItemUrlsStr);
+	} else {
+		// restore visited history
+		vistiedItemUrlsStr = window.localStorage.getItem('visitedUrls');
+		if (!vistiedItemUrlsStr != "null") 
+			visitedUrls = new Set();
+		else 
+			visitedUrls = JSON.parse(vistiedItemUrlsStr);
+	}
+	var startUrls = new Array();
+	startUrls.push(config.startUrl);
+	PageCrawler.addCrawlUrls(startUrls);
+	alert(PageCrawler.running);
+});
+
 
 alert('loaded ok');
